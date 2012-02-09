@@ -1,0 +1,21 @@
+!!!
+%html
+  %head
+    %title I.O.U
+    %link{href: "stylesheets/bootstrap.css", rel: "stylesheet", media: "screen", type: "text/css"}
+    %script{src: "javascripts/vendor/jquery-1.7.1.min.js"}
+    %script{src: "javascripts/vendor/underscore-min.js"}
+    %script{src: "http://twitter.github.com/hogan.js/builds/1.0.3/hogan.js"}
+    %script{src: "javascripts/vendor/backbone.min.js"}
+    %script{src: "javascripts/application.js"}
+    %script{src: "javascripts/debt/templates.js"}
+    %script{src: "javascripts/debt/model.js"}
+    %script{src: "javascripts/debt/views.js"}
+    %script{src: "javascripts/debt/routers.js"}
+    
+  %body
+    .container
+      %header
+    
+      = yield
+    
