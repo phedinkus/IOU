@@ -1,4 +1,3 @@
-
 IOU.Models.Debt = Backbone.Model.extend({
 });
 

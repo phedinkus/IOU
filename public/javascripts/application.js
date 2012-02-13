@@ -7,7 +7,7 @@ window.IOU = {
 
 $(function(){
   window.debts = new IOU.Models.Debts;
-  new IOU.Views.Debt.Index({collection: debts});
+  new IOU.AppView({collection: debts});
   
   debts.fetch();
 })

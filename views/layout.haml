@@ -14,8 +14,10 @@
     %script{src: "javascripts/debt/routers.js"}
     
   %body
-    .container
-      %header
+    .container-fluid.row
+      .span4.offset4
+        %header
+          %h1 IOU
     
       = yield
     
