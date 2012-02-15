@@ -58,7 +58,7 @@ IOU.Views.Debt.New = Backbone.View.extend({
   },
   saveDebt: function(event){
     event.preventDefault();
-    var data = $.deparam( $('form', this.el).serialize() );
+    var data = {name: $("#new_debt_name").val(), amount: $("#new_debt_amount").val()};
     this.collection.create(data, {
       error: function(model, error){
         alert(model);
