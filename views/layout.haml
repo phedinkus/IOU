@@ -3,21 +3,32 @@
   %head
     %title I.O.U
     %link{href: "stylesheets/bootstrap.css", rel: "stylesheet", media: "screen", type: "text/css"}
+    %link{href: "stylesheets/main.less", rel: "stylesheet/less", type: "text/css"}
+    %script{src: "javascripts/vendor/less-1.2.1.min.js"}
     %script{src: "javascripts/vendor/jquery-1.7.1.min.js"}
     %script{src: "javascripts/vendor/underscore-min.js"}
     %script{src: "http://twitter.github.com/hogan.js/builds/1.0.3/hogan.js"}
     %script{src: "javascripts/vendor/backbone.min.js"}
     %script{src: "javascripts/application.js"}
-    %script{src: "javascripts/debt/templates.js"}
-    %script{src: "javascripts/debt/model.js"}
-    %script{src: "javascripts/debt/views.js"}
-    %script{src: "javascripts/debt/routers.js"}
+    %script{src: "javascripts/tallies/templates.js"}
+    %script{src: "javascripts/tallies/model.js"}
+    %script{src: "javascripts/tallies/views.js"}
+    %script{src: "javascripts/tallies/router.js"}
+    %script{src: "javascripts/debtors/templates.js"}
+    %script{src: "javascripts/debtors/model.js"}
+    %script{src: "javascripts/debtors/views.js"}
+    %script{src: "javascripts/debtors/router.js"}
     
   %body
-    .container-fluid.row
-      .span4.offset4
-        %header
-          %h1 IOU
+    .container-fluid
+      .nav
+        %h1.brand IOU
+        .login
+          - if current_user
+            %strong== Hello #{@current_user.name} |
+            %a{href: "/session/destroy"} Logout
+          - else
+            %a{href: '/auth/twitter'} Sign in with Twitter!
     
-      = yield
+    = yield
     

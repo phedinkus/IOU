@@ -1,13 +1,17 @@
 window.IOU = {
-  Models:     {},
-  Views:      {},
-  Templates:  {},
-  Routers:    {}
+  Models:       {},
+  Collections:  {},
+  Views:        {},
+  Templates:    {},
+  Router:       {},
+  init: function(){
+    new IOU.Router.Debtors;
+    // new IOU.Router.Tallies;
+    Backbone.history.start();
+  }
 };
 
 $(function(){
-  window.debts = new IOU.Models.Debts;
-  new IOU.AppView({collection: debts});
-  
-  debts.fetch();
+  IOU.init();
+
 })
