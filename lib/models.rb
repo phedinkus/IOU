@@ -9,8 +9,8 @@ class User
   property :id,           Serial
   property :name,         String
   property :nickname,     String
-  property :email,        String
-  property :uid,          String
+  property :email,        String, unique: true
+  property :uid,          String, unique: true
   property :created_at,   DateTime
   property :provider,     String
   
@@ -29,6 +29,21 @@ class Debtor
   belongs_to :user, key: true
   has n, :tallies
   
+  def with_tallies
+    tally_attrs = []
+    tallies.each do |tally|
+      tally_attrs << tally.attributes
+    end
+    self.attributes.merge({tallies: tally_attrs})
+  end
+  
+  def self.all_with_tallies
+    debtor_array = []
+    all.each do |debtor|
+      debtor_array << debtor.with_tallies
+    end
+    debtor_array
+  end
 end
 
 class Tally
@@ -38,7 +53,6 @@ class Tally
   property :amount,   Float
   
   belongs_to :debtor, key: true
-  has 1, :user, through: :debtor
 end
 
 User.storage_exists? ? User.auto_upgrade! : User.auto_migrate!

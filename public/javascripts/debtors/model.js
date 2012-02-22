@@ -1,10 +1,20 @@
 IOU.Models.Debtor = Backbone.Model.extend({
   initialize: function(){
-    _.bindAll(this, 'getTallies');
+    _.bindAll(this, 'createTallyCollection', 'totalDebt');
+    this.createTallyCollection();
   },
-  getTallies: function(){
-    this.tallies = new IOU.Collections.Tallies();
-    this.tallies.fetch({ data: {debtor_id: this.get("id")}, processData:true });
+  createTallyCollection: function(){
+    this.tallies = new IOU.Collections.Tallies(this.attributes.tallies);
+    this.totalDebt()
+  },
+  totalDebt: function(){
+    var total = 0;
+    _.each(this.tallies.models, function(t){
+      total += t.get("amount");
+    });
+    // return total;
+    this.set("debtAmount", total);
+    return this.get("debtAmount");
   }
 });
 
@@ -12,10 +22,16 @@ IOU.Collections.Debtors = Backbone.Collection.extend({
   model: IOU.Models.Debtor,
   url: '/api/debtors',
   initialize: function(){
-    _.bindAll(this, 'fetchTalliesForModels');
-    this.bind("reset", this.fetchTalliesForModels);
+    _.bindAll(this, 'fetchTalliesForDebtor', 'totalDebt');
+    this.on("reset", this.fetchTalliesForDebtor);
   },
-  fetchTalliesForModels: function(){
-    _.each(this.models, function(model){ model.getTallies() });
-  }
+  fetchTalliesForDebtor: function(){
+  },  
+  totalDebt: function(){
+      var total = 0;
+      _.each(this.tallies.models, function(t){
+        total += t.get("amount");
+      });
+      return total;
+    }
 });

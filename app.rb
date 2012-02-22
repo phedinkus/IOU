@@ -38,7 +38,7 @@ class IOU < Sinatra::Application
   
   get '/auth/twitter/callback' do
     auth = request.env['omniauth.auth']
-    user = User.get(uid: auth["uid"]) || User.create(provider: auth["provider"], uid: auth["uid"], name: auth["info"]["name"], nickname: auth["info"]["nickname"])  
+    user = User.get(uid: auth["uid"]) || User.create(provider: auth["provider"], uid: auth["uid"], name: auth["info"]["name"], nickname: auth["info"]["nickname"])
     session[:user_id] = user.id
     redirect '/'
   end
@@ -52,31 +52,26 @@ class IOU < Sinatra::Application
     haml :index
   end
   
-  get '/api/tallies' do
-    puts params
-    # Find the tallies for the person
-    content_type :json
-    [{amount: 5, name: "adam"}, {amount: 10, name: "eve"}, {amount: -4, name: "dino"}].to_json
-    # @db.members.to_json
-  end
-  
-  post '/api/tallies' do
-    # params = request.body.read
-    # record = JSON.parse params
-    # record = @db.save_doc record
-    # @db.save
-    
-    # content_type :json
-    # record.to_json
-  end
-  
   get '/api/debtors' do
-    # Find the debtors for the user signed in
     content_type :json
-    [{id: 1, name: "adam"}, {id: 2, name: "eve"}, {id: 3, name: "dino"}].to_json
+    current_user.debtors.all_with_tallies.to_json
   end
   
   post '/api/debtors' do
     
   end
+  
+  post '/api/tallies' do
+    content_type :json
+    
+    params = request.body.read
+    tally = Tally.new(JSON.parse(params))
+    if tally.save
+      tally.to_json#, status: 201
+    end
+    # 
+    # record.to_json
+  end
+  
+
 end
