@@ -8,29 +8,40 @@ require 'ruby-debug'
 require './lib/models'
 
 class IOU < Sinatra::Application
-  
+  set :root, File.dirname(__FILE__)
   set :haml, { format: :html5 }
   set :sass, { style: :compact, debug_info: false }
   
-  use Rack::Session::Cookie
+  enable :sessions
+  
+  def self.load_config(file)
+    if File.exist? file
+      yaml = YAML.load_file file
+        set yaml
+    end
+  end
+  
+  configure do
+    load_config "./config/twitter.yml"
+  end
 
   use OmniAuth::Builder do
     # provider :open_id, OpenID::Store::Filesystem.new('/tmp')
-    provider :twitter, 'OyahKCdOr60bNQHQ59YVxQ', '2wYZPDZaoNI8ELK843c44e1wXGPsEaM02BIa5HiN5Y'
+    provider :twitter, settings.consumer_key, settings.consumer_secret
   end
   
   helpers do
-    def current_user  
-      @current_user ||= User.get(session[:user_id]) if session[:user_id]  
+    def current_user
+      @current_user ||= User.get(session[:user_id]) if session[:user_id]
     end
   end
   
-  before do
-    unless ["/sign_in", "/auth/twitter", "/auth/twitter/callback"].include? request.path_info
-      
+  before do 
+    unless ['/sign_in', "/auth/twitter", "/auth/twitter/callback"].include? request.path_info
       redirect '/sign_in' unless current_user
     end
   end
+
   
   get '/sign_in' do
     haml :sign_in
@@ -38,7 +49,7 @@ class IOU < Sinatra::Application
   
   get '/auth/twitter/callback' do
     auth = request.env['omniauth.auth']
-    user = User.get(uid: auth["uid"]) || User.create(provider: auth["provider"], uid: auth["uid"], name: auth["info"]["name"], nickname: auth["info"]["nickname"])
+    user = User.first(uid: auth["uid"]) || User.create(provider: auth["provider"], uid: auth["uid"], name: auth["info"]["name"], nickname: auth["info"]["nickname"])
     session[:user_id] = user.id
     redirect '/'
   end
@@ -49,6 +60,7 @@ class IOU < Sinatra::Application
   end
     
   get '/' do
+    
     haml :index
   end
   
@@ -62,6 +74,7 @@ class IOU < Sinatra::Application
   end
   
   post '/api/tallies' do
+    
     content_type :json
     
     params = request.body.read

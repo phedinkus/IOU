@@ -9,6 +9,8 @@ IOU.Router.Debtors = Backbone.Router.extend({
   },
   index: function(){
     var debtor_view = new IOU.Views.Debtors.List({collection: debtors});
-    $('#content').html(debtor_view.render().el); 
+    var debtor_form = new IOU.Views.Debtors.New();
+    $('#content').append(debtor_form.render().el);
+    $('#content').append(debtor_view.render().el); 
   }
 });

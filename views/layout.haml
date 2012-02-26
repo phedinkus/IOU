@@ -20,15 +20,19 @@
     %script{src: "javascripts/debtors/router.js"}
     
   %body
-    .container-fluid
-      .nav
-        %h1.brand IOU
-        .login
-          - if current_user
-            %strong== Hello #{@current_user.name} |
-            %a{href: "/session/destroy"} Logout
-          - else
-            %a{href: '/auth/twitter'} Sign in with Twitter!
+    .navbar.navbar
+      .navbar-inner
+        .container
+          .brand IOU
+          %ul.nav.pull-right
+            - if current_user
+              %li.navbar-text
+                %span.greeting== Hello #{@current_user.name} |
+              %li
+                %a{href: "/session/destroy"} Logout
+            - else
+              %li
+                %a{href: '/auth/twitter'} Sign in with Twitter!
     
     = yield
     
