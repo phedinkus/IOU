@@ -17,18 +17,18 @@ class IOU < Sinatra::Application
   def self.load_config(file)
     if File.exist? file
       yaml = YAML.load_file file
-        set yaml
+      set yaml
     end
   end
   
   configure do
     load_config "./config/twitter.yml"
   end
-
+  
   use OmniAuth::Builder do
-    # provider :open_id, OpenID::Store::Filesystem.new('/tmp')
-    provider :twitter, settings.consumer_key, settings.consumer_secret
+    provider :twitter, IOU.settings.consumer_key, IOU.settings.consumer_secret
   end
+
   
   helpers do
     def current_user
